@@ -29,10 +29,14 @@ Claude sollte sich immer über `/prime` am Session-Start orientieren, dann mit v
 .
 ├── CLAUDE.md              # Diese Datei — Kern-Kontext, immer geladen
 ├── .claude/
-│   └── commands/          # Slash-Commands, die Claude ausführen kann
-│       ├── prime.md       # /prime — Session-Initialisierung
-│       ├── create-plan.md  # /create-plan — Implementierungspläne erstellen
-│       └── implement.md   # /implement — Pläne umsetzen
+│   ├── commands/          # Slash-Commands, die Claude ausführen kann
+│   │   ├── prime.md       # /prime — Session-Initialisierung
+│   │   ├── create-plan.md # /create-plan — Implementierungspläne erstellen
+│   │   ├── implement.md   # /implement — Pläne umsetzen
+│   │   └── shutdown.md    # /shutdown — Session aufräumen, committen, pushen
+│   └── skills/            # Skills, die Claude bei passenden Aufgaben lädt
+│       ├── skill-creator/   # Neue Skills entwerfen und paketieren
+│       └── mcp-integration/ # MCP-Server einbinden (Beispiele & Referenzen)
 ├── context/               # Hintergrund-Kontext über den User und das Projekt
 │                          # (Vom User mit Rolle, Zielen, Strategien befüllen)
 ├── plans/                 # Implementierungspläne erstellt von /create-plan
@@ -81,6 +85,23 @@ Liest den Plan, führt jeden Schritt der Reihe nach aus, validiert die Arbeit un
 
 Beispiel: `/implement plans/2026-01-28-wettbewerbs-analyse-command.md`
 
+### /shutdown
+
+**Zweck:** Session sauber beenden.
+
+Am Ende jeder Session ausführen. Claude scannt den Workspace, räumt temporäre Dateien auf, aktualisiert CLAUDE.md und `context/`, committet und pusht die Änderungen und liefert eine kurze Zusammenfassung mit offenen Punkten für die nächste Session.
+
+---
+
+## Skills
+
+Skills liegen in `.claude/skills/` und werden von Claude automatisch geladen, wenn eine Aufgabe dazu passt.
+
+| Skill             | Zweck                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| `skill-creator`   | Neue Skills entwerfen, strukturieren und paketieren (inkl. Hilfsskripten in `scripts/`).       |
+| `mcp-integration` | MCP-Server (stdio, SSE, HTTP) einbinden; Beispielkonfigurationen und Referenzen zu Auth & Tools. |
+
 ---
 
 ## Kritische Anweisung: Diese Datei pflegen
@@ -118,6 +139,7 @@ Um diesen Workspace an deine eigenen Bedürfnisse anzupassen, fülle deine Konte
 3. **Änderungen planen**: `/create-plan` vor größeren Ergänzungen verwenden
 4. **Umsetzen**: `/implement` zum Ausführen von Plänen verwenden
 5. **Pflegen**: Claude aktualisiert CLAUDE.md und context/ während sich der Workspace weiterentwickelt
+6. **Ende**: `/shutdown` ausführen, um aufzuräumen, zu committen und zu pushen
 
 ---
 
